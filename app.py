@@ -1,6 +1,6 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, flash, session
 from flask_debugtoolbar import DebugToolbarExtension
-from surveys import Question,Survey, satisfaction_survey
+from surveys import satisfaction_survey as survey
 
 app = Flask(__name__)
 
@@ -12,7 +12,21 @@ responses = []
 
 @app.route('/')
 def start_page():
+    '''Display start page'''
     
-    title = satisfaction_survey.title
-    instructions = satisfaction_survey.instructions
-    return render_template('base.html', title=title, instructions=instructions)
+    title = survey.title
+    instructions = survey.instructions
+    return render_template('start_survey.html', title=title, instructions=instructions)
+
+@app.route('/questions/<int:qid>')
+def get_questions_page(qid):
+    '''Display current question'''
+
+    question = survey.questions[qid]
+    return render_template('questions.html', question=question)
+
+    
+
+    
+    
+    
