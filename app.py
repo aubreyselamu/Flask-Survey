@@ -24,6 +24,15 @@ def start_page():
 def get_questions_page(qid):
     '''Display current question'''
 
+    if(responses is None):
+        return redirect('/')
+    
+    if (len(survey.questions) == len(responses)):
+        return redirect('/complete')
+    
+    if(len(responses) != qid):
+        return redirect(f'/questions/{len(responses)}')
+
     question = survey.questions[qid]
     return render_template('questions.html', question=question)
 
@@ -44,3 +53,7 @@ def get_choice():
         return render_template('thankyou.html')
     else:
         return redirect(f'/questions/{len(responses)}')
+
+@app.route('/complete')
+def complete():
+    return render_template('thankyou.html')
