@@ -1,4 +1,4 @@
-from flask import Flask, render_template, flash, session, request, redirect
+from flask import Flask, render_template, session, request, redirect, flash
 from flask_debugtoolbar import DebugToolbarExtension
 from surveys import satisfaction_survey as survey
 
@@ -8,6 +8,7 @@ app = Flask(__name__)
 app.debug = True
 app.config['SECRET_KEY']= 'Yohanna_12'
 toolbar = DebugToolbarExtension(app)
+app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 
 
 responses = []
@@ -30,7 +31,9 @@ def get_questions_page(qid):
     if (len(survey.questions) == len(responses)):
         return redirect('/complete')
     
+    
     if(len(responses) != qid):
+        flash(f"Invalid Question id: {qid}!")
         return redirect(f'/questions/{len(responses)}')
 
     question = survey.questions[qid]
